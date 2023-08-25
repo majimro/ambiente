@@ -14,7 +14,7 @@ stages:
   - job: Build
     displayName: Build job
     pool:
-      name: 'agentpoc'
+      name: 'grupopoc'
     steps:
     - task: DockerInstaller@0
       inputs:
