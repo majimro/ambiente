@@ -1,31 +1,44 @@
 trigger:
 - main
 
-variables:
-  dockerRegistryServiceConnection: 'mjregistry'
-  imageRepository: 'imagepoc'
-  dockerfilePath: '$(Build.SourcesDirectory)/app/Dockerfile'
-  tag: '$(Build.BuildId)'
+pool:
+  vmImage: ubuntu-latest
 
-stages:
-- stage: Build
-  displayName: Build and publish stage
-  jobs:
-  - job: Build
-    displayName: Build job
-    pool:
-      name: 'grupopoc'
-    steps:
-    - task: DockerInstaller@0
-      inputs:
-        dockerVersion: '17.09.0-ce'
-
-    - task: Docker@2
-      displayName: Build and publish image to Azure Container Registry
-      inputs:
-        command: buildAndPush
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        tags: |
-          $(tag)
+steps:
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshiftcs'
+    version: '4.14.1'
+    cmd: 'oc project mauriciojimenez-1-dev'
+  displayName: Switch to project
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshiftcs'
+    version: '4.14.1'
+    cmd: 'oc new-app https://github.com/majimro/ambiente.git'
+    ignoreFlag: true
+  displayName: Load repo
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshiftcs'
+    version: '4.14.1'
+    cmd: 'oc expose service/ambiente'
+    ignoreFlag: true
+  displayName: Create route
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshiftcs'
+    version: '4.14.1'
+    cmd: 'oc start-build ambiente --follow'
+    ignoreFlag: true
+  displayName: Start new build
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshiftcs'
+    version: '4.14.1'
+    cmd: 'oc status'
