@@ -14,6 +14,14 @@ public class MainController {
 
 	private static final String template = "Valor, %s!";
 
+	@GetMapping("/")
+	public String getFecha() {
+		Date date = new Date();
+		SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy  hh:mm:ss");
+		String stringDate= DateFor.format(date);
+		return new String(String.format(template, stringDate));
+	}
+
 	@GetMapping("/var")
 	public String getVariable(@RequestParam(value = "variable", defaultValue = "JAVA_HOME") String name) {
 		String valor = null;
@@ -22,14 +30,6 @@ public class MainController {
 			valor = "No existe la variable solicitada";
 		}
 		return new String(String.format(template, valor));
-	}
-
-	@GetMapping("/fecha")
-	public String getFecha() {
-		Date date = new Date();
-		SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy  hh:mm:ss");
-		String stringDate= DateFor.format(date);
-		return new String(String.format(template, stringDate));
 	}
 
 }
