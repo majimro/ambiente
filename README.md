@@ -15,3 +15,7 @@ Podrá agregar más parámetros en el controller
 - JDK 8.0
 - Windows 10, Linux
 - Configurar ambiente para proyectos JAVA
+
+<table>
+  <tr><td>Dato</td><td>Dato</td></tr>
+</table>
