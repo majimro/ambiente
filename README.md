@@ -16,6 +16,6 @@ Podrá agregar más parámetros en el controller
 - Windows 10, Linux
 - Configurar ambiente para proyectos JAVA
 
-<table>
+<table width='100%'>
   <tr><td>Dato</td><td>Dato</td></tr>
 </table>
